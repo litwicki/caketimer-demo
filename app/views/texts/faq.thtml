@@ -1,0 +1,70 @@
+<div class="box">
+	<h2>Frequently Asked Questions</h2>
+	<p class="question">
+		Have these Questions really been asked by people frequently before?
+	</p>
+	<p class="answer">
+		No. But I like writing imaginary FAQ's anyway ; ).
+	</p>
+	
+	<p class="question">
+		What License is used for CakeTimer?
+	</p>
+	<p class="answer">
+		The parts of CakeTimer I wrote have been licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license.</a> However, some parts of it are used from the 
+		<a href="https://sourceforge.net/projects/uber-uploader" title="The Uber Uploader project">Uber Uploader</a> project. Those parts remain under the  
+		<a href="http://www.mozilla.org/MPL/" title="The Mozilla Public License (Version 1.1)">Mozilla Public License (Version 1.1)</a>. I'm no license expert, 
+		so you'll have to figure out what that means for yourself. Oh and before I forget, I also use the 
+		<a href="http://developer.yahoo.com/yui/index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> for AJAX/Events, which is licensed under a 
+		<a href="http://developer.yahoo.com/yui/license.txt" title="BSD License">BSD License.</a>
+	</p>
+	
+	<p class="question">
+		I need help with ...!
+	</p>
+	<p class="answer">
+		You can try your luck and check if I'm in <strong>#cakephp</strong> (type in the_undefined, my nickname and I'll listen up) or send me an email to <a href="FelixGe@web.de">FelixGe@web.de</a>. If I've got time and know the answer I'll help you the best I can. Anyway, I'm also available for <strong>freelancing work</strong> if you need me to do more than that. Check out <a href="http://www.fg-webdesign.de" title="Felix Geisend&ouml;rfer - Webdesign">fg-webdesign.de</a> for more information (German only, sorry for that).
+	</p>
+	
+	<p class="question">
+		I found a Bug in your code! Where can I submit it? / I want feature X!
+	</p>
+	<p class="answer">
+		For now just email me at <a href="FelixGe@web.de">FelixGe@web.de</a> and I'll take a look at when I can. If this starts to generate more interest I'll make a CakeForge project for it with a better Bug reporting solution.
+	</p>
+	
+	<p class="question">
+		How much work went into this?
+	</p>
+	<p class="answer">
+		Somehwhere in the area of 25 hours so far. Mostly because I tried to make it as ready for public usage as possible. If I'd just done it for myself it would have been way less.
+	</p>	
+	
+	<p class="question">
+		What Browsers are supported?
+	</p>
+	<p class="answer">
+		I've successfully tested it with Firefox 1.5, Opera 7, and IE 6 locally running windows. Safari/Konquerer don't work right now and would need some additional code for support.
+	</p>	
+	
+	<p class="question">
+		Where can I find the latest updates for this project?
+	</p>
+	<p class="answer">
+		I'll always use my webblog <a href="http://www.thinkingphp.org" title="ThinkingPHP">ThinkingPHP</a> to inform you about updates first. This would be the place to check frequently.
+	</p>
+	
+	<p class="question">
+		Why is this page so damn ugly to look at?
+	</p>
+	<p class="answer">
+		Well, I really don't know. But I'd be glad if you want to make a better design for it ; ).
+	</p>
+	
+	<p class="question">
+		How can I contribute?
+	</p>
+	<p class="answer">
+		I would really appriciate it and credit you for sharing your own improvments on the code. Just send them to me at: <a href="FelixGe@web.de">FelixGe@web.de</a>. I would also take donations in form of coffee and beer in order to continue the support for this project ; ).
+	</p>		
+</div>

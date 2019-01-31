@@ -1,0 +1,152 @@
+<div class="box">
+	<h2>How to use CakeTimer</h2>
+	<p>
+		This documentation is not going into great detail about what to do, but is rather a quick summary of the steps required to get your own CakeTimer script
+		running. If I find time I'll write a more detailed tutorial.
+	</p>
+		
+	<p>
+	Using CakeTimer is actually fairly easy. All you have to do is to create a View with a form like this:
+	</p>
+	<textarea class="code" readonly style="height: 80px;"><form name="upload-form" id="upload-form" action="uploads/upload" method="post" enctype="multipart/form-data" target="upload-frame">
+	<input type="hidden" id="upload-range" name="upload_range" value="1">
+	<input id="upload-button" type="submit" value="Upload File">
+</form></textarea>
+	<p>Then you need a hidden iframe so the form will be posted there. Make sure to make it invisible using some css.</p>
+	<textarea class="code" readonly style="height: 30px;"><iframe src="" id="upload-frame" name="upload-frame"></iframe></textarea>
+	<p>This is an example of how you make a simple propress display. It also shows how to include the required JS files (important).</p>
+	<textarea class="code" readonly style="height: 810px;">&lt;?php echo $javascript->link('yahoo/YAHOO'); ?&gt; 
+&lt;?php echo $javascript->link('yahoo/connection'); ?&gt; 		
+&lt;?php echo $javascript->link('yahoo/event'); ?&gt;
+&lt;?php echo $javascript->link('caketimer/common'); ?&gt; 
+&lt;?php echo $javascript->link('caketimer/caketimer'); ?&gt;	 
+
+<script language="javascript" type="text/javascript">
+	function handleProgress(bytesUploaded, bytesTotal)
+	{
+		if (bytesTotal==0)
+			var percentage = '0.00';
+		else
+			var percentage = ((bytesUploaded/bytesTotal)*100).toFixed(2);
+			
+		$('progress-status').innerHTML = bytesUploaded+' bytes / '+bytesTotal+' bytes'
+		$('progress-bar').innerHTML = percentage+' %';
+	}
+
+	function handleBegin(sid)
+	{	
+		// Handle the event that user submits the form		
+	}
+
+	function handleDone(sid, files)
+	{
+		// Handle the event of the upload beeing (successfully done)
+	}
+	
+	function handleError(sid, msg, additionalInfo)
+	{
+		// Handle errors that may occure
+	}
+
+	// The sid variable is provided by the controller, look farther down for this.
+	var upload_sid = '&lt;?php echo $upload_sid; ?&gt;';	
+	
+	// The parameters for this function are:
+	#1: ID of the form to monitor
+	#2: Url to the CGI Upload script
+	#3: Url to the AJAX progressTracker
+	#4: Functions to use for event output
+	#5: The unique sid for this upload
+	
+	CakeTimer.monitorUploads('upload-form', 
+				 '/cgi-bin/uber_uploader.cgi', 
+				 'uploads/progress', 
+				 {progress: handleProgress, error: handleError, begin: handleBegin, done: handleDone}, 
+				 upload_sid);	
+</script></textarea>
+
+	<p>So the next thing is your Controller for CakeTimer. Here is the one I use for the demonstration which deletes every file as soon as it get's uploaded:</p>
+	<textarea class="code" readonly style="height: 900px;">class UploadsController extends AppController 
+{
+    var $name = "Uploads";
+    var $uses = array();
+    var $helpers = array('Javascript');
+    var $pageTitle = 'Demo Page';
+    
+    // Needs to be included to make CakeTimer work
+    var $components = array('CakeTimer');
+    
+    function beforeFilter()
+    {
+        //  Setting the Config for the CakeTimer component
+        $this->CakeTimer->uploadDir = APP.WEBROOT_DIR.DS.'uploads';;
+        $this->CakeTimer->tempDir = APP.WEBROOT_DIR.DS.'uploads';;        
+    }
+    
+    function index()
+    {
+        // The CakeTimer upload forms require a Sid we need to provide
+        $this->CakeTimer->provideUploadSid();  
+        
+        // This tells our layout to include the js libraries (not part of CakeTimer)
+        $this->set('jsUseYahoo', true);
+    }
+    
+    function progress()
+    {        
+       // This does the AJAX communication for the progress updates
+       $this->CakeTimer->handleProgress();
+    }
+    
+    function upload()
+    {    
+        $this->autoRender = false;
+        
+        // Here we get the data from the form the user submitted
+        $data = $this->CakeTimer->getPostData(null, true);
+        
+         // Delete everything right away
+         $counter = 0;
+        while (true)
+        {
+            if (isset($data['upfile_'.$counter]))
+                unlink($this->CakeTimer->uploadDir.DS.$data['upfile_'.$counter]);
+            else 
+                break;
+                
+            $counter++;
+        }        
+        
+        debug('Upload Complete');
+        debug($data);
+    }    
+}	
+</textarea>	
+	<p>The only thing left now is the setup of the Perl script. Open up the /cgi-bin/uber_uploader.cgi for that reason and modify the following part to fit your needs</p>
+	<textarea class="code" readonly style="height: 320px;">my $add_safety_extension = '.tmp';                                                  # This allows you to add an extensions to uploaded files, makes sure no php files etc. are created  
+my $temp_dir = $ENV{'DOCUMENT_ROOT'} . '/cake-timer/app/webroot/uploads/';          # ATTENTION: this variable must be the same as the $temp_dir set in uber_uploader_global.php  
+my $upload_dir = $ENV{'DOCUMENT_ROOT'} . '/cake-timer/app/webroot/uploads/';        # ATTENTION: this variable must be the same as the $upload_dir set in uber_uploader_global.php
+my $max_upload = 50*2097152;                                                         # Max upload size in bytes (2 * 1024 * 1024 = 2097152 = 2MB)
+my $overwrite_existing_files = 0;                                                   # Set to 1 if over writing existing uploaded files is desired
+my $redirect_after_upload = 1;                                                      # Set to 1 if you want to redirect to the php finished page
+my $redirect_using_html = 0;                                                        # Set to 1 if you are redirecting and want to use html handle the refresh
+my $redirect_url = 'http://' . $ENV{'SERVER_NAME'} . '/cake-timer/uploads/upload'; # Path to php redirect page ( eg. http://www.yoursite.com/upload/uber_uploader_finished.php )
+my $progress_url = 'http://' . $ENV{'SERVER_NAME'} . '/cake-timer/uploads/progress'; # Path to php progress page ( eg. http://www.yoursite.com/upload/uber_uploader_progress.php )				
+my $create_files_by_rename = 1;                                                     # Set to 0 if you want to copy the file instead of rename
+my $debug_cgi = 0;                                                                  # Set to 1 to debug and call ( eg. www.yoursite.com/cgi-bin/uber_uploader.cgi?cmd=debug )
+my $errors_to_browser = 0;                                                          # Set to 1 if you want fatal errors displayed in the browser 
+my $flock_flength_file = 1;                                                         # Set to 0 if file locking the flength file is not desired
+	</textarea>
+	<p>Good luck! The easiest way to understand how everything works is to download the example project.</p>
+</div>
+<div class="box">
+	<h2>Todo</h2>
+	<p>
+		There are still a couple of things I have to do. Most importantly:
+		<ul>
+			<li>No-JS failsafe (should be very easy, but needs to be done)</li>
+			<li>Write a better tutorial</li>			
+			<li>Create a nicer Design for this page</li>						
+		</ul>
+	</p>
+</div>

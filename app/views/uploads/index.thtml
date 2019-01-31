@@ -1,0 +1,149 @@
+<?php echo $javascript->link('caketimer/common'); ?> 
+<?php echo $javascript->link('caketimer/caketimer'); ?>	 
+<?php echo $javascript->link('uploads/eyecandy'); ?>	 
+		
+<script language="javascript" type="text/javascript">
+	/*
+		This piece of Javascript controls the user-interface for the CakeTimer solution implemented on this page,
+		however, this is not directly related to the CakeTimer project itself, since the idea is to have everybody
+		create their own interface for it.		
+		
+		But you may use it for you own projects without any license restrictions.
+	*/
+	
+	function handleProgress(bytesUploaded, bytesTotal)
+	{
+		if (bytesTotal==0)
+			var percentage = '0.00';
+		else
+			var percentage = ((bytesUploaded/bytesTotal)*100).toFixed(2);
+							
+		$('progress-status').innerHTML = bytesUploaded+' bytes / '+bytesTotal+' bytes'
+		$('progress-bar').innerHTML = percentage+' %';
+		clipBackground(percentage);
+	}
+	
+	function handleBegin(sid)
+	{	
+		$('progress-div').style.display = 'block';	
+		$('choose-file-div').style.display = 'none';				
+	}
+	
+	function handleDone(sid, files)
+	{
+		$('upload-done').style.display = 'block';			
+		$('choose-file-div').style.display = 'none';
+		$('progress-div').style.display = 'none';		
+		$('upload-list-div').style.display = 'none';				
+				
+		var filesDoneList = $('files-done-list');			
+		filesDoneList.innerHTML = '';
+				
+		var fileSize = new Number;
+		for(var i=0; i<files.length;i++)
+		{
+			fileSize = (parseInt(files[i][1])/1024).toFixed(1);
+			
+			filesDoneList.innerHTML = filesDoneList.innerHTML+'<li>'+files[i][0]+' ('+fileSize+' kb)</li>';
+		}
+	}
+	
+	function handleError(sid, msg, additionalInfo)
+	{
+		$('error-box').style.display = 'block';
+		
+		if (additionalInfo!=null)
+			msg = msg+'<br>'+additionalInfo;
+		
+		$('error-box').innerHTML = $('error-box').innerHTML+'<p><b>Error:</b> '+msg+'</p>';	
+	}
+	
+	function clipBackground(percentage)
+	{
+		var width = (-300 + ((percentage/100)*300)).toFixed(0);
+	
+		$('progress-bar').style.backgroundPosition = width+'px 0';
+	}
+			
+	/* 
+		This set's the upload_sid provided by the CakeTimer component and then tells the CakeTimer object to observ
+		the form 'upload-form'.		
+	*/
+			
+	var upload_sid = '<?php echo $upload_sid; ?>';	
+	CakeTimer.monitorUploads('upload-form', 
+							 '/cgi-bin/uber_uploader.cgi', 
+							 'uploads/progress', 
+							 {progress: handleProgress, error: handleError, begin: handleBegin, done: handleDone}, 
+							 upload_sid);	
+</script>
+
+<div id="debug"></div>
+
+<div class="box">
+	<h2>About</h2>
+	<p>
+		This is a demonstration of an AJAX powered progressbar to monitor file uploads with (Cake)PHP. Yes you've heard right! Well, but before you begin to drool all over the place, there is one downside: it requires a Perl script that allows you to know the upload progress. But besides this little downer you have a maximum of flexibility regarding the design of your progress-bar and integration in your system.
+	</p>
+	<p>
+		The perl script, and some php snippets have been taken from the <a href="https://sourceforge.net/projects/uber-uploader">Uber Uploader</a> project. My work only includes the JavaScript class that allows you to monitor the file uploads of any form, as well as the integration with the CakePHP framework and some modifications to the original perl code.
+	</p>
+	<ul>
+		<li>Check out the <?php echo $html->link("Documentation", "/documentation"); ?></li>
+	</ul>
+	<p>
+		<b>Important:</b> This Demo has only been verified to work with Firefox, IE and Opera so far. I've had feedback about it beeing broken in Safari (and Konquerer), but as since I don't own a Mac (and don't want to do so) I can't debug it there. If you need Safari (or Konquerer) support I guess it'd only require very little amount of work to get it going
+	</p>
+</div>
+
+<div id="error-box" class="box error">
+	<h2>Error:</h2>
+	<p id="error-msg"></p>
+</div>
+
+<div id="progress-div" class="box">
+	<h2>Upload in progress - Please wait ...</h2>
+	<p>
+		<div id="progress-bar"> </div>
+		<div id="progress-status"> </div>
+	</p>
+</div>
+
+<form name="upload-form" id="upload-form" action="uploads/upload" method="post" enctype="multipart/form-data" target="upload-frame">
+	<div id="choose-file-div" class="box">
+		<h2>Choose a file for uploading:</h2>	
+		<p>
+			Don't worry about filesize, everything get's deleted as soon as its uploaded right away. The maximum filesize for this demo is set to 30mb. 
+		</p>
+			<input type="hidden" id="upload-range" name="upload_range" value="1">
+			<p id="uploaders-container"><input id="uploader_0" type="file" name="upfile_0"></p>
+	</div>
+		
+	<div id="upload-list-div" class="box">
+		<h2>Files to upload</h2>
+		<p id="no-files-info">No files have been selected to upload.</p>
+		<ul id="files-list" class="files">
+	
+		</ul>
+		<p><input id="upload-button" type="submit" value="Upload File"></p>		
+	</div>
+</form>		
+
+<div id="upload-done" class="box">
+	<h2>Congratulations - Your upload was successful</h2>
+	<p>
+		Now this is just the beginning. You can use this to do whatever you want! The ability to define your own handlers give you a maximum of control without having too much work integrating this script into many projects.
+	</p>
+	<h3>List of files you've uploaded</h3>
+	<ul id="files-done-list" class="files">
+	
+	</ul>
+	<sub>All those files have a .tmp extension for security reasons. You can change this behavior in the perl script.</sub>
+	<h3>Want to try it again?</h3>
+	<p>
+		The CakeTimer JS class cleans up it's mess after itself so you can use it several times without having to reload the whole page. <a href="javascript:tryItAgain();">Try it</a>.
+	</p>
+</div>
+
+<!-- Yeah, I know iframes are bad ... I can replace it with a dynamically created one so it doesn't show up in the soure, would that be better?? -->
+<iframe src="" id="upload-frame" name="upload-frame"></iframe>

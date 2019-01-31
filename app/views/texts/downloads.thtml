@@ -1,0 +1,10 @@
+<div class="box">
+	<h2>Downloads</h2>
+	<p>
+		You can either decide to download a little package with nothing but the CakeTimer code (and dependent libraries) in it or go with the a zipped version of this demonstration page.
+		<ul>
+			<li>Download: <?php echo $html->link("CakeTimer package only", "/downloads/caketimer.zip",  array("title" => "CakeTimer Package only")); ?></li>
+			<li>Download:  <?php echo $html->link("CakeTimer Demo App", "/downloads/caketimer-demo.zip",  array("title" => "CakeTimer Demo Application")); ?></li>
+		</ul>
+	</p>
+</div>

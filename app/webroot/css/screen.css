@@ -1,0 +1,166 @@
+body{
+	margin: 0;
+	padding: 0;		
+
+	background-color: white;
+}
+
+#container{
+	margin-right: 5%;
+	margin-left: 5%;
+}
+
+#progress-bar, #progress-status{
+	width: 300px;
+	height: 20px;
+	background-position: -300px 0;
+	background-image: url(../img/progress-bar.jpg);	
+	background-repeat: no-repeat;
+	border: 1px solid black;
+	text-align: center;
+	margin-left: 1em;	
+}
+
+#progress-div{
+	display: none;
+}
+
+#progress-status{
+	border: none;
+	margin-left: 1em;
+}
+
+#upload-done, #upload-frame, #upload-button{
+	display: none;
+}
+
+#upload-frame{
+/*	display: block; */
+	width: 600px;
+	height: 500px;
+}
+
+ul.files li{
+	list-style-type: none;
+	list-style-image: url(../img/file_icon.gif) !important;	
+}
+
+
+.box{
+	background-color: #fffccc;
+	border: 1px solid black;
+	margin-bottom: 1em;
+}
+
+.box h2{
+	background-color: #fff007;
+	margin: 0;
+	padding-left: 0.5em;
+	border-bottom: 1px solid black;
+}
+
+.error{
+	background-color: #FFFFFF;
+	display: none;
+}
+
+.error h2{
+	background-color: #FF0000;
+	color: #FFFFFF;
+}
+
+.box h3{
+	padding-left: 1em;
+}
+
+#top-bar{
+	background-color: #ffaa07;
+	color: #000000;
+	
+	margin: 0;
+	margin-bottom: 0.9em;	
+	padding: 0.2em;
+	padding-right: 5%;
+	padding-left: 5%;
+	text-align: right;
+	
+	border-bottom: 1px solid black;	
+
+}
+
+#top-bar #menu, #menu li{
+	padding: 0;
+	margin: 0;
+	float: left;
+	list-style-type: none;
+}
+
+#menu li{
+	padding-right: 1em;
+	padding-top: 0.25em;
+}
+
+#menu a{
+	color: black;
+	font-weight: bold;
+}
+
+#top-bar h1{
+	font-weight: bold;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 130%;		
+	padding: 0;
+	margin: 0;	
+}
+
+h2,h3{
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 135%;
+	text-decoration: none;
+}
+
+h3{
+	font-size: 120%;
+}
+
+p, sub{
+	padding-left: 1em;
+	padding-right: 1em;
+	/*width: 80%;*/
+}
+
+a:link, a:hover, a:active, a:visited{
+	text-decoration: none;
+	color: #FF0000;
+}
+
+a:hover{
+	text-decoration: underline;
+}
+
+textarea{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;	
+	text-align: left;
+}
+
+textarea.code{
+	border: 1px solid black;
+	padding-top: 1em;
+	padding-left: 1em;
+	width: 90%;
+	margin-bottom: 1em;
+	font: "Courier New", Courier, mono;
+	overflow: auto;
+}
+
+p.question{
+	font-weight: bold;
+	margin-bottom: 0.5em;
+}
+
+p.answer{
+	margin-top: 0.5em;
+	padding-left: 1.5em;
+}
